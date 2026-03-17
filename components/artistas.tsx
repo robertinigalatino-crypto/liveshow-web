@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Phone, ChevronRight, X, ExternalLink, MessageCircle } from "lucide-react"
+import { slugify } from "@/lib/utils"
 import type { Artist, Category, SiteSettings } from "@/lib/types"
 
 interface ArtistasProps {
@@ -68,16 +69,23 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
         {/* Section Header */}
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-4">
-            Nuestro Roster
+            Contratación Directa
           </span>
           <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-foreground">
-            Artistas <span className="text-gradient">Exclusivos</span>
+            Contratación de Artistas <span className="text-gradient">Exclusivos</span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Más de 500 artistas disponibles para tu evento
+            Somos la productora líder en el booking y contratación de artistas para eventos en Buenos Aires y todo el país.
           </p>
-          <p className="mt-2 text-sm font-medium text-primary/80 animate-pulse">
-            Hacé clic sobre un artista para ver sus fotos y biografía
+          <div className="sr-only">
+            <h3>Cómo contratar artistas para eventos</h3>
+            <p>
+              Ofrecemos gestión integral para contratar cantantes, bandas de covers, humoristas y shows en vivo. 
+              Presupuestos inmediatos para contratación de artistas argentinos y booking internacional.
+            </p>
+          </div>
+          <p className="mt-4 text-sm font-medium text-primary/80 animate-pulse">
+            Hacé clic sobre un artista para ver cómo contratarlo, fotos y biografía
           </p>
         </div>
 
@@ -107,17 +115,17 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
         {/* Artists Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
           {filteredArtists.slice(0, visibleCount).map((artist, index) => (
-            <div
+            <Link
               key={artist.id}
-              onClick={() => setSelectedIndex(selectedIndex === index ? null : index)}
-              className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:scale-[1.02] cursor-pointer"
+              href={`/artistas/${slugify(artist.name)}`}
+              className="group relative aspect-[3/4] rounded-xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/20 hover:scale-[1.02] cursor-pointer block"
             >
-            <Image
-              src={(artist.image_url && artist.image_url.trim()) ? artist.image_url : "/placeholder.jpg"}
-              alt={artist.name}
-              fill
-              className="object-cover transition-all duration-700 group-hover:scale-110"
-            />
+              <Image
+                src={(artist.image_url && artist.image_url.trim()) ? artist.image_url : "/placeholder.jpg"}
+                alt={artist.name}
+                fill
+                className="object-cover transition-all duration-700 group-hover:scale-110"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
               
               {/* Content */}
@@ -136,11 +144,11 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
 
               {/* Hover overlay */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-[2px]">
-                <span className="px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-black uppercase tracking-widest flex items-center gap-1">
-                  BIO <ChevronRight className="h-3 w-3" />
+                <span className="px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-black uppercase tracking-widest flex items-center gap-1 shadow-lg">
+                  VER PERFIL <ChevronRight className="h-3 w-3" />
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

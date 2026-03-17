@@ -79,6 +79,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                 href={`https://www.instagram.com/${instagramHandle}`}
                 target="_blank"
                 className="p-2.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white hover:text-primary transition-all duration-300"
+                aria-label="Seguinos en Instagram"
               >
                 <Instagram className="h-4 w-4" />
                 <span className="sr-only">Instagram</span>
@@ -87,6 +88,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                 href={whatsappLink}
                 target="_blank"
                 className="p-2.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white hover:text-primary transition-all duration-300"
+                aria-label="Contactanos por WhatsApp"
               >
                 <Image
                   src="/whatsapp.png"
@@ -203,6 +205,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                   href={`https://www.instagram.com/${instagramHandle}`}
                   target="_blank"
                   className="p-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white hover:text-primary transition-all duration-300 hover:scale-110"
+                  aria-label="Seguinos en Instagram"
                 >
                   <Instagram className="h-4 w-4" />
                 </Link>
@@ -210,6 +213,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                   href={whatsappLink}
                   target="_blank"
                   className="p-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white hover:text-primary transition-all duration-300 hover:scale-110"
+                  aria-label="Contactanos por WhatsApp"
                 >
                   <Image src="/whatsapp.png" alt="WhatsApp" width={16} height={16} className="h-4 w-4" />
                 </Link>
@@ -303,7 +307,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
 
         {/* Main Title */}
         <div className="text-center mb-1.5 sm:mb-3 max-w-4xl mx-auto px-2 mt-8 md:mt-12">
-          <h2 className="text-white text-2xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase leading-[0.95] text-balance">
+          <h1 className="text-white text-2xl sm:text-4xl md:text-5xl font-black tracking-tight uppercase leading-[0.95] text-balance">
             <span className="block text-[0.4em] sm:text-[0.36em] font-serif italic font-medium tracking-[0.18em] text-white/60 mb-2 normal-case">
               Contratá
             </span>
@@ -313,7 +317,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
             <span className="block text-[0.62em] sm:text-[0.68em] font-serif italic font-normal tracking-tight text-white/90 mt-1 normal-case">
               para tu evento
             </span>
-          </h2>
+          </h1>
         </div>
 
         {/* Categories Pills */}

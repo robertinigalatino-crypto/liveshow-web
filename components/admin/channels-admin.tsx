@@ -21,6 +21,8 @@ interface ChannelsAdminProps {
 export function ChannelsAdmin({ channels, onRefresh }: ChannelsAdminProps) {
   const [editing, setEditing] = useState<Channel | null>(null)
   const [isCreating, setIsCreating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -44,12 +46,42 @@ export function ChannelsAdmin({ channels, onRefresh }: ChannelsAdminProps) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (editing) {
-      const { error } = await supabase.from("channels").update(formData).eq("id", editing.id)
-      if (!error) { onRefresh(); setEditing(null); resetForm() }
-    } else {
-      const { error } = await supabase.from("channels").insert([{ ...formData, is_active: true }])
-      if (!error) { onRefresh(); setIsCreating(false); resetForm() }
+    setError(null)
+    setIsSubmitting(true)
+    
+    try {
+      if (editing) {
+        const { error: submitError } = await supabase
+          .from("channels")
+          .update({
+            ...formData,
+            logo_url: formData.image_url // Sync image_url to logo_url for compatibility
+          })
+          .eq("id", editing.id)
+        
+        if (submitError) throw submitError
+        onRefresh()
+        setEditing(null)
+        resetForm()
+      } else {
+        const { error: submitError } = await supabase
+          .from("channels")
+          .insert([{ 
+            ...formData, 
+            logo_url: formData.image_url, // Sync image_url to logo_url for compatibility
+            is_active: true 
+          }])
+        
+        if (submitError) throw submitError
+        onRefresh()
+        setIsCreating(false)
+        resetForm()
+      }
+    } catch (err: any) {
+      console.error("Error submitting channel:", err)
+      setError(err.message || "Ocurrió un error al guardar el canal")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -95,6 +127,11 @@ export function ChannelsAdmin({ channels, onRefresh }: ChannelsAdminProps) {
             <CardHeader><CardTitle>{editing ? "Editar Canal" : "Nuevo Canal"}</CardTitle></CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm border border-destructive/20">
+                    {error}
+                  </div>
+                )}
                 <div className="space-y-2">
                   <Label>Nombre</Label>
                   <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="bg-background/50" />
@@ -123,8 +160,10 @@ export function ChannelsAdmin({ channels, onRefresh }: ChannelsAdminProps) {
                   <Input type="number" value={formData.display_order} onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) || 0 })} className="bg-background/50" />
                 </div>
                 <div className="flex gap-2 pt-2">
-                  <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90">{editing ? "Guardar" : "Crear"}</Button>
-                  <Button type="button" variant="outline" onClick={() => { setIsCreating(false); setEditing(null); resetForm() }}>Cancelar</Button>
+                  <Button type="submit" disabled={isSubmitting} className="flex-1 bg-primary hover:bg-primary/90">
+                    {isSubmitting ? "Guardando..." : (editing ? "Guardar" : "Crear")}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={() => { setIsCreating(false); setEditing(null); resetForm(); setError(null) }}>Cancelar</Button>
                 </div>
               </form>
             </CardContent>

@@ -141,8 +141,11 @@ export function Footer({ categories = [], settings = {} }: FooterProps) {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-center gap-4">
-          <p className="text-sm text-muted-foreground">
-            {new Date().getFullYear()} {companyName}. Todos los derechos reservados.
+          <p className="text-sm text-muted-foreground flex flex-col items-center gap-2">
+            <span>{new Date().getFullYear()} {companyName}. Todos los derechos reservados.</span>
+            <span className="text-xs opacity-70">
+              elegante pagina hecha por <Link href="https://wa.me/543518720951" target="_blank" className="text-primary hover:underline transition-all font-semibold">Webora</Link>
+            </span>
           </p>
         </div>
       </div>

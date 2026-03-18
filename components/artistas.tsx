@@ -130,7 +130,7 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
               
               {/* Content */}
               <div className="absolute inset-x-0 bottom-0 p-3">
-                <h3 className="font-bold text-foreground text-sm sm:text-base leading-tight mb-1 group-hover:text-primary transition-colors truncate">
+                <h3 className="font-bold text-foreground text-sm sm:text-base leading-tight mb-1 group-hover:text-primary transition-colors line-clamp-2">
                   {artist.name}
                 </h3>
                 <div className="flex flex-wrap gap-1">

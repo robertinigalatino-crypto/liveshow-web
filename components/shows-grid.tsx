@@ -103,9 +103,9 @@ export function ShowsGrid({ shows = [], hideHeader = false }: ShowsGridProps) {
 
                   {/* Content */}
                   <CardContent className="p-5 pb-2 min-h-[160px]">
-                    <div className="mb-4">
+                    <div className="mb-4 min-h-[4rem] flex flex-col justify-start">
                       <p className="text-primary font-semibold text-sm mb-1">{show.artist}</p>
-                      <h3 className="font-serif text-xl font-bold text-foreground leading-snug group-hover:text-primary transition-colors duration-300">
+                      <h3 className="font-serif text-xl font-bold text-foreground leading-snug group-hover:text-primary transition-colors duration-300 line-clamp-2">
                         {show.title}
                       </h3>
                     </div>
@@ -113,11 +113,11 @@ export function ShowsGrid({ shows = [], hideHeader = false }: ShowsGridProps) {
                     <div className="space-y-2 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-primary shrink-0" />
-                        <span className="capitalize truncate">{dateInfo.full}</span>
+                        <span className="capitalize line-clamp-1">{dateInfo.full}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-primary shrink-0" />
-                        <span className="truncate">{show.venue}</span>
+                        <span className="line-clamp-1">{show.venue}</span>
                       </div>
                     </div>
                   </CardContent>

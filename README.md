@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v
 ## Built with v
 This repository is linked to a [v0](https://v0.app) roject. You can continue developing by visitingthe link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `mai ill automatically depl
 
-[Continue working on v0 (https://v0.app/chatrojects/prj_VFANzFqLs294C9GhbjG7Up7YF
+[Continue working on v0 (https:///chatrojects/prj_VFANzFqLs294C9GhbjG7Up7YF
 ## Getting S
 First, run the development
 ```b

@@ -124,11 +124,11 @@ export function ShowsCarousel({ shows = [] }: ShowsCarouselProps) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-0" />
                   </Link>
 
-                  <div className="text-center px-1">
-                    <h4 className={`text-sm sm:text-base font-black uppercase tracking-tight transition-colors truncate ${isActive ? 'text-primary' : 'text-white'}`}>
+                  <div className="text-center px-1 min-h-[3rem] flex flex-col justify-center">
+                    <h4 className={`text-xs sm:text-sm font-black uppercase tracking-tight transition-colors line-clamp-2 ${isActive ? 'text-primary' : 'text-white'}`}>
                       {show.artist}
                     </h4>
-                    <p className="text-[10px] text-white/50 uppercase font-bold tracking-widest truncate">
+                    <p className="text-[9px] text-white/50 font-bold tracking-widest line-clamp-1 mt-0.5">
                       {show.venue}
                     </p>
                   </div>

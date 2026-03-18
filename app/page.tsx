@@ -111,10 +111,7 @@ export default async function Home() {
     getSiteSettings(),
   ])
 
-  const featuredShow = shows.find((s) => s.is_featured) ?? shows[0] ?? null
-  const remainingShows = featuredShow
-    ? shows.filter((s) => s.id !== featuredShow.id)
-    : shows
+  const featuredShows = shows.filter((s) => s.is_featured)
   
   return (
     <main className="min-h-screen bg-black overflow-x-hidden relative">
@@ -128,7 +125,7 @@ export default async function Home() {
 
       <div className="relative z-10">
         <Hero categories={categories} settings={settings} />
-        <ShowsCarousel shows={shows} />
+        <ShowsCarousel shows={featuredShows} />
         <ShowTruck />
         <Services services={services} />
         <Artistas artists={artists} categories={categories} settings={settings} />

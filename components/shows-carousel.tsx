@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ChevronLeft, ChevronRight, Ticket } from "lucide-react"
+import { ChevronLeft, ChevronRight, Ticket, Share2 } from "lucide-react"
 import { format } from "date-fns"
 import { es } from "date-fns/locale"
 import type { Show } from "@/lib/types"
+
+import { slugify } from "@/lib/utils"
 
 interface ShowsCarouselProps {
   shows?: Show[]
@@ -80,14 +82,15 @@ export function ShowsCarousel({ shows = [] }: ShowsCarouselProps) {
             {displayShows.map((show, index) => {
               const showDate = formatDate(show.date)
               const isActive = index === currentIndex
+              const showSlug = slugify(show.title)
+
               return (
                 <div 
                   key={show.id} 
                   className="flex-none w-[200px] sm:w-[240px] snap-center group flex flex-col gap-3"
                 >
                   <Link
-                    href={show.ticket_url}
-                    target="_blank"
+                    href={`/shows/${showSlug}`}
                     onClick={() => {
                       setIsAutoPlaying(false)
                       setCurrentIndex(index)
@@ -113,8 +116,8 @@ export function ShowsCarousel({ shows = [] }: ShowsCarouselProps) {
                     {/* Buy Ticket Overlay */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm z-20">
                       <div className="bg-white text-black px-4 py-2 rounded-full text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-2 shadow-2xl">
-                        <Ticket className="h-4 w-4" />
-                        Comprar
+                        <Share2 className="h-4 w-4" />
+                        Ver Info & Comprar
                       </div>
                     </div>
 

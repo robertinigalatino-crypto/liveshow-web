@@ -18,6 +18,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
+  const { data: shows } = await supabase
+    .from('shows')
+    .select('title')
+    .eq('is_active', true)
+
+  const showUrls = (shows || []).map((show) => ({
+    url: `${baseUrl}/shows/${slugify(show.title)}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }))
+
   return [
     {
       url: baseUrl,
@@ -26,5 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     ...artistUrls,
+    ...showUrls,
   ]
 }

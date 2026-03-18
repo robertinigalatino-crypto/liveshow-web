@@ -16,7 +16,7 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
   const logoUrl = settings.logo_url || "/logo.png"
   const instagramHandle = settings.instagram_handle || "liveshowproducciones"
   const whatsappLink = `https://wa.me/${whatsappNumber}`
-  const heroTicketLink = settings.hero_ticket_link || "#shows"
+  const heroTicketLink = settings.hero_ticket_link || "/shows"
   const heroTecnicaLink = settings.hero_tecnica_link || "#servicios"
   const heroShowTruckLink = settings.hero_show_truck_link || "#show-truck"
 
@@ -110,8 +110,8 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                 >
                   <Link 
                     href={heroTecnicaLink}
-                    target={heroTecnicaLink.startsWith("#") ? undefined : "_blank"}
-                    rel={heroTecnicaLink.startsWith("#") ? undefined : "noopener noreferrer"}
+                    target={heroTecnicaLink.startsWith("http") ? "_blank" : undefined}
+                    rel={heroTecnicaLink.startsWith("http") ? "noopener noreferrer" : undefined}
                     onClick={(e) => heroTecnicaLink.startsWith("#") && scrollToSection(e, heroTecnicaLink.replace("#", ""))}
                     className="flex flex-col items-center gap-1"
                   >
@@ -134,8 +134,8 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                 >
                   <Link 
                     href={heroShowTruckLink}
-                    target={heroShowTruckLink.startsWith("#") ? undefined : "_blank"}
-                    rel={heroShowTruckLink.startsWith("#") ? undefined : "noopener noreferrer"}
+                    target={heroShowTruckLink.startsWith("http") ? "_blank" : undefined}
+                    rel={heroShowTruckLink.startsWith("http") ? "noopener noreferrer" : undefined}
                     onClick={(e) => heroShowTruckLink.startsWith("#") && scrollToSection(e, heroShowTruckLink.replace("#", ""))}
                     className="flex flex-col items-center gap-1"
                   >
@@ -152,8 +152,8 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                 >
                   <Link
                     href={heroTicketLink}
-                    target={heroTicketLink.startsWith("#") ? undefined : "_blank"}
-                    rel={heroTicketLink.startsWith("#") ? undefined : "noopener noreferrer"}
+                    target={heroTicketLink.startsWith("http") ? "_blank" : undefined}
+                    rel={heroTicketLink.startsWith("http") ? "noopener noreferrer" : undefined}
                     onClick={(e) => heroTicketLink.startsWith("#") && scrollToSection(e, heroTicketLink.replace("#", ""))}
                     className="flex items-center justify-center gap-2.5"
                   >
@@ -230,8 +230,8 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
               >
                 <Link 
                   href={heroTecnicaLink}
-                  target={heroTecnicaLink.startsWith("#") ? undefined : "_blank"}
-                  rel={heroTecnicaLink.startsWith("#") ? undefined : "noopener noreferrer"}
+                  target={heroTecnicaLink.startsWith("http") ? "_blank" : undefined}
+                  rel={heroTecnicaLink.startsWith("http") ? "noopener noreferrer" : undefined}
                   onClick={(e) => heroTecnicaLink.startsWith("#") && scrollToSection(e, heroTecnicaLink.replace("#", ""))}
                   className="flex items-center"
                 >
@@ -258,8 +258,8 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
               >
                 <Link 
                   href={heroShowTruckLink}
-                  target={heroShowTruckLink.startsWith("#") ? undefined : "_blank"}
-                  rel={heroShowTruckLink.startsWith("#") ? undefined : "noopener noreferrer"}
+                  target={heroShowTruckLink.startsWith("http") ? "_blank" : undefined}
+                  rel={heroShowTruckLink.startsWith("http") ? "noopener noreferrer" : undefined}
                   onClick={(e) => heroShowTruckLink.startsWith("#") && scrollToSection(e, heroShowTruckLink.replace("#", ""))}
                   className="flex items-center"
                 >
@@ -278,8 +278,8 @@ export function Hero({ categories = [], settings = {} }: HeroProps) {
                 >
                   <Link 
                     href={heroTicketLink} 
-                    target={heroTicketLink.startsWith("#") ? undefined : "_blank"}
-                    rel={heroTicketLink.startsWith("#") ? undefined : "noopener noreferrer"}
+                    target={heroTicketLink.startsWith("http") ? "_blank" : undefined}
+                    rel={heroTicketLink.startsWith("http") ? "noopener noreferrer" : undefined}
                     onClick={(e) => heroTicketLink.startsWith("#") && scrollToSection(e, heroTicketLink.replace("#", ""))} 
                     className="flex items-center justify-center gap-2.5"
                   >

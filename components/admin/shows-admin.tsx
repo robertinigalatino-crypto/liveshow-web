@@ -32,6 +32,7 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
     ticket_url: "",
     price: "",
     is_featured: false,
+    show_in_all_shows: true,
   })
 
   const supabase = useMemo(() => createClient(), [])
@@ -65,7 +66,7 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
   }
 
   function resetForm() {
-    setFormData({ title: "", artist: "", description: "", venue: "", date: "", image_url: "", ticket_url: "", price: "", is_featured: false })
+    setFormData({ title: "", artist: "", description: "", venue: "", date: "", image_url: "", ticket_url: "", price: "", is_featured: false, show_in_all_shows: true })
   }
 
   function startEditing(show: Show) {
@@ -75,6 +76,7 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
       title: show.title, artist: show.artist, description: show.description, venue: show.venue,
       date: show.date.slice(0, 16), image_url: show.image_url, ticket_url: show.ticket_url,
       price: show.price, is_featured: show.is_featured,
+      show_in_all_shows: show.show_in_all_shows !== false,
     })
   }
 
@@ -131,9 +133,23 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
                   <Label>Precio</Label>
                   <Input value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} required className="bg-background/50" />
                 </div>
-                <div className="flex items-center justify-between py-2">
-                  <Label>Destacar</Label>
-                  <Switch checked={formData.is_featured} onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })} />
+                <div className="space-y-2 border border-border/40 rounded-lg p-3 bg-muted/10">
+                  <Label className="text-sm font-semibold text-foreground">Visibilidad</Label>
+                  <p className="text-xs text-muted-foreground mb-2">Seleccioná dónde aparece este show</p>
+                  <div className="flex items-center justify-between py-1.5">
+                    <div>
+                      <p className="text-sm font-medium">⭐ Próximos Shows</p>
+                      <p className="text-xs text-muted-foreground">Carrusel en la home</p>
+                    </div>
+                    <Switch checked={formData.is_featured} onCheckedChange={(checked) => setFormData({ ...formData, is_featured: checked })} />
+                  </div>
+                  <div className="flex items-center justify-between py-1.5">
+                    <div>
+                      <p className="text-sm font-medium">📋 Todos los Shows</p>
+                      <p className="text-xs text-muted-foreground">Página /shows</p>
+                    </div>
+                    <Switch checked={formData.show_in_all_shows} onCheckedChange={(checked) => setFormData({ ...formData, show_in_all_shows: checked })} />
+                  </div>
                 </div>
                 <div className="flex gap-2 pt-2">
                   <Button type="submit" className="flex-1 bg-primary hover:bg-primary/90">{editingShow ? "Guardar" : "Crear"}</Button>
@@ -163,9 +179,14 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
                   <div className="relative h-40">
                     <Image src={show.image_url} alt={show.title} fill className="object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+                    <div className="absolute top-3 right-3 flex flex-col gap-1">
                     {show.is_featured && (
-                      <span className="absolute top-3 right-3 px-2 py-1 bg-primary text-primary-foreground text-xs font-bold rounded-full">Destacado</span>
+                      <span className="px-2 py-0.5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full">⭐ Home</span>
                     )}
+                    {show.show_in_all_shows !== false && (
+                      <span className="px-2 py-0.5 bg-blue-600 text-white text-[10px] font-bold rounded-full">📋 /shows</span>
+                    )}
+                  </div>
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-bold text-foreground text-lg mb-1">{show.title}</h3>

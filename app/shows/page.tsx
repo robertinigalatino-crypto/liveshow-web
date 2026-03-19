@@ -18,6 +18,7 @@ async function getShows(): Promise<Show[]> {
       .from("shows")
       .select("*")
       .eq("is_active", true)
+      .eq("show_in_all_shows", true)
       .order("date", { ascending: true })
     
     if (error) {

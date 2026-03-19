@@ -9,6 +9,7 @@ export interface Show {
   ticket_url: string
   price: string
   is_featured: boolean
+  show_in_all_shows?: boolean
   is_active?: boolean
   created_at?: string
 }

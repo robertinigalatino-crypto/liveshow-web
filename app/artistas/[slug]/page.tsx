@@ -119,7 +119,7 @@ export default async function ArtistPage({ params }: Props) {
               src={artist.image_url || "/placeholder.jpg"}
               alt={artist.name}
               fill
-              className="object-cover"
+              className="object-contain bg-black/50"
               priority
             />
           </div>
@@ -213,7 +213,7 @@ export default async function ArtistPage({ params }: Props) {
                     src={img || "/placeholder.jpg"}
                     alt={`${artist.name} - Galería ${i + 1}`}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-contain transition-transform duration-500 group-hover:scale-110 bg-black/30"
                   />
                 </div>
               ))}

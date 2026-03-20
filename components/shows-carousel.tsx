@@ -105,7 +105,7 @@ export function ShowsCarousel({ shows = [] }: ShowsCarouselProps) {
                       src={(show.image_url && show.image_url.trim()) ? show.image_url : "/placeholder.jpg"}
                       alt={show.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="object-contain transition-transform duration-700 group-hover:scale-110 bg-black/40"
                     />
                     
                     {/* Date Overlay */}

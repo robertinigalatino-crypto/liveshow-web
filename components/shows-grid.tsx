@@ -84,7 +84,7 @@ export function ShowsGrid({ shows = [], hideHeader = false }: ShowsGridProps) {
                       src={(show.image_url && show.image_url.trim()) ? show.image_url : "/placeholder.jpg"}
                       alt={show.title}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-contain transition-transform duration-700 group-hover:scale-105 bg-black/40"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
 

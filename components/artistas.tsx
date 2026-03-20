@@ -124,7 +124,7 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
                 src={(artist.image_url && artist.image_url.trim()) ? artist.image_url : "/placeholder.jpg"}
                 alt={artist.name}
                 fill
-                className="object-cover transition-all duration-700 group-hover:scale-110"
+                className="object-contain transition-all duration-700 group-hover:scale-110 bg-black/40"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
               

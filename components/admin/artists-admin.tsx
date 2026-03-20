@@ -12,6 +12,7 @@ import { ImageDropzone } from "@/components/ui/image-dropzone"
 import { GalleryDropzone } from "@/components/ui/gallery-dropzone"
 import { Trash2, Edit, Plus, Users, X, Link as LinkIcon, Instagram, Youtube, Music2, Globe } from "lucide-react"
 import Image from "next/image"
+import { useToast } from "@/components/ui/use-toast"
 import type { Artist, ArtistLink, Category } from "@/lib/types"
 
 interface ArtistsAdminProps {
@@ -42,6 +43,7 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
     display_order: 0,
   })
   const [tagInput, setTagInput] = useState("")
+  const { toast } = useToast()
 
   const supabase = useMemo(() => createClient(), [])
 
@@ -82,17 +84,39 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
 
     if (editing) {
       const { error } = await supabase.from("artists").update(payload).eq("id", editing.id)
-      if (!error) { onRefresh(); setEditing(null); resetForm() }
+      if (!error) {
+        toast({ title: "Éxito", description: "Artista actualizado correctamente" })
+        onRefresh()
+        setEditing(null)
+        resetForm()
+      } else {
+        toast({ title: "Error", description: `No se pudo actualizar el artista: ${error.message}`, variant: "destructive" })
+        console.error("Error updating artist:", error)
+      }
     } else {
       const { error } = await supabase.from("artists").insert([{ ...payload, is_active: true }])
-      if (!error) { onRefresh(); setIsCreating(false); resetForm() }
+      if (!error) {
+        toast({ title: "Éxito", description: "Artista creado correctamente" })
+        onRefresh()
+        setIsCreating(false)
+        resetForm()
+      } else {
+        toast({ title: "Error", description: `No se pudo crear el artista: ${error.message}`, variant: "destructive" })
+        console.error("Error creating artist:", error)
+      }
     }
   }
 
   async function handleDelete(id: string) {
     if (confirm("¿Eliminar este artista?")) {
       const { error } = await supabase.from("artists").delete().eq("id", id)
-      if (!error) onRefresh()
+      if (!error) {
+        toast({ title: "Éxito", description: "Artista eliminado correctamente" })
+        onRefresh()
+      } else {
+        toast({ title: "Error", description: `No se pudo eliminar el artista: ${error.message}`, variant: "destructive" })
+        console.error("Error deleting artist:", error)
+      }
     }
   }
 

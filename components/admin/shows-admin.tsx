@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch"
 import { ImageDropzone } from "@/components/ui/image-dropzone"
 import { Trash2, Edit, Plus, Calendar, MapPin, Ticket } from "lucide-react"
 import Image from "next/image"
+import { useToast } from "@/components/ui/use-toast"
 import type { Show } from "@/lib/types"
 
 interface ShowsAdminProps {
@@ -34,6 +35,7 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
     is_featured: false,
     show_in_all_shows: true,
   })
+  const { toast } = useToast()
 
   const supabase = useMemo(() => createClient(), [])
 
@@ -51,17 +53,39 @@ export function ShowsAdmin({ shows, onRefresh }: ShowsAdminProps) {
     e.preventDefault()
     if (editingShow) {
       const { error } = await supabase.from("shows").update(formData).eq("id", editingShow.id)
-      if (!error) { onRefresh(); setEditingShow(null); resetForm() }
+      if (!error) {
+        toast({ title: "Éxito", description: "Show actualizado correctamente" })
+        onRefresh()
+        setEditingShow(null)
+        resetForm()
+      } else {
+        toast({ title: "Error", description: `No se pudo actualizar el show: ${error.message}`, variant: "destructive" })
+        console.error("Error updating show:", error)
+      }
     } else {
       const { error } = await supabase.from("shows").insert([{ ...formData, is_active: true }])
-      if (!error) { onRefresh(); setIsCreating(false); resetForm() }
+      if (!error) {
+        toast({ title: "Éxito", description: "Show creado correctamente" })
+        onRefresh()
+        setIsCreating(false)
+        resetForm()
+      } else {
+        toast({ title: "Error", description: `No se pudo crear el show: ${error.message}`, variant: "destructive" })
+        console.error("Error creating show:", error)
+      }
     }
   }
 
   async function handleDelete(id: string) {
     if (confirm("¿Eliminar este show?")) {
       const { error } = await supabase.from("shows").delete().eq("id", id)
-      if (!error) onRefresh()
+      if (!error) {
+        toast({ title: "Éxito", description: "Show eliminado correctamente" })
+        onRefresh()
+      } else {
+        toast({ title: "Error", description: `No se pudo eliminar el show: ${error.message}`, variant: "destructive" })
+        console.error("Error deleting show:", error)
+      }
     }
   }
 

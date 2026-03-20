@@ -21,7 +21,7 @@ async function getShow(slug: string) {
     .select('*')
     .eq('is_active', true)
 
-  const show = shows?.find(s => slugify(s.title) === slug)
+  const show = shows?.find(s => slugify(`${s.artist} ${s.title}`) === slug)
   return show || null
 }
 
@@ -29,11 +29,11 @@ export async function generateStaticParams() {
   const supabase = createStaticClient()
   const { data: shows } = await supabase
     .from('shows')
-    .select('title')
+    .select('title, artist')
     .eq('is_active', true)
 
   return (shows || []).map((show) => ({
-    slug: slugify(show.title),
+    slug: slugify(`${show.artist} ${show.title}`),
   }))
 }
 

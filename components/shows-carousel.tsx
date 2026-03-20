@@ -82,7 +82,7 @@ export function ShowsCarousel({ shows = [] }: ShowsCarouselProps) {
             {displayShows.map((show, index) => {
               const showDate = formatDate(show.date)
               const isActive = index === currentIndex
-              const showSlug = slugify(show.title)
+              const showSlug = slugify(`${show.artist} ${show.title}`)
 
               return (
                 <div 

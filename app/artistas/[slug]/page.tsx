@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation'
 import { createClient, createStaticClient } from '@/lib/supabase/server'
 import { slugify } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Phone, ArrowLeft, MessageCircle, ExternalLink, Tag, Instagram, Twitter, Youtube, Facebook, Music2 } from 'lucide-react'
+import { Phone, ArrowLeft, MessageCircle, ExternalLink, Tag, Instagram, Twitter, Youtube, Facebook, Music2, Play } from 'lucide-react'
 import { ArtistMediaCarousel } from '@/components/artist-media-carousel'
 import Script from 'next/script'
 
@@ -118,7 +118,6 @@ export default async function ArtistPage({ params }: Props) {
           <ArtistMediaCarousel
             name={artist.name}
             mainImage={artist.image_url}
-            videoUrl={artist.video_url}
             gallery={artist.gallery}
           />
 
@@ -156,6 +155,38 @@ export default async function ArtistPage({ params }: Props) {
                 {artist.bio}
               </p>
             </div>
+
+            {/* Video Section */}
+            {artist.video_url && (
+              <div className="space-y-4 pt-4">
+                <h2 className="text-xl font-bold flex items-center gap-2 text-primary">
+                  <Play className="h-5 w-5 fill-primary" />
+                  Video Promocional
+                </h2>
+                <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40 backdrop-blur-sm">
+                  {artist.video_url.includes("youtube.com") || artist.video_url.includes("youtu.be") ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${
+                        artist.video_url.includes("watch?v=") 
+                          ? artist.video_url.split("watch?v=")[1].split("&")[0] 
+                          : artist.video_url.split("/").pop()
+                      }`}
+                      title="YouTube video player"
+                      className="absolute inset-0 w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <video
+                      src={artist.video_url}
+                      controls
+                      className="w-full h-full object-contain"
+                      poster={artist.image_url}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* CTA Box */}
             <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md space-y-4">

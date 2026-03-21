@@ -74,6 +74,12 @@ export default async function ShowPage({ params }: Props) {
   const formattedDate = format(date, "EEEE d 'de' MMMM", { locale: es })
   const formattedTime = format(date, "HH:mm")
 
+  const numericPrice = show.price ? show.price.replace(/\\D/g, '') || "0" : "0"
+
+  const startDateObj = new Date(show.date)
+  // Assuming a 3-hour duration for the event if endDate not specified
+  const endDateObj = new Date(startDateObj.getTime() + 3 * 60 * 60 * 1000)
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -81,17 +87,25 @@ export default async function ShowPage({ params }: Props) {
     description: show.description,
     image: show.image_url,
     startDate: show.date,
+    endDate: endDateObj.toISOString(),
+    eventStatus: 'https://schema.org/EventScheduled',
     location: {
       '@type': 'Place',
       name: show.venue,
       address: show.venue,
     },
+    organizer: {
+      '@type': 'Organization',
+      name: 'Live Show Producciones',
+      url: 'https://liveshowproducciones.com.ar'
+    },
     offers: {
       '@type': 'Offer',
       url: show.ticket_url,
-      price: show.price,
+      price: numericPrice,
       priceCurrency: 'ARS',
       availability: 'https://schema.org/InStock',
+      validFrom: show.created_at || '2024-01-01T00:00:00Z',
     },
     performer: {
       '@type': 'Person',

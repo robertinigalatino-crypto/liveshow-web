@@ -6,6 +6,7 @@ import { createClient, createStaticClient } from '@/lib/supabase/server'
 import { slugify } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Phone, ArrowLeft, MessageCircle, ExternalLink, Tag, Instagram, Twitter, Youtube, Facebook, Music2 } from 'lucide-react'
+import { ArtistMediaCarousel } from '@/components/artist-media-carousel'
 import Script from 'next/script'
 
 interface Props {
@@ -113,16 +114,13 @@ export default async function ArtistPage({ params }: Props) {
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          {/* Main Image */}
-          <div className="relative aspect-[3/4] rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-            <Image
-              src={artist.image_url || "/placeholder.jpg"}
-              alt={artist.name}
-              fill
-              className="object-contain bg-black/50"
-              priority
-            />
-          </div>
+          {/* Media Carousel */}
+          <ArtistMediaCarousel
+            name={artist.name}
+            mainImage={artist.image_url}
+            videoUrl={artist.video_url}
+            gallery={artist.gallery}
+          />
 
           {/* Info */}
           <div className="space-y-8">
@@ -158,38 +156,6 @@ export default async function ArtistPage({ params }: Props) {
                 {artist.bio}
               </p>
             </div>
-
-            {/* Video Section */}
-            {artist.video_url && (
-              <div className="space-y-4">
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                  <span className="h-6 w-1 bg-primary rounded-full" />
-                  Video Promocional
-                </h2>
-                <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
-                  {artist.video_url.includes("youtube.com") || artist.video_url.includes("youtu.be") ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${
-                        artist.video_url.includes("watch?v=") 
-                          ? artist.video_url.split("watch?v=")[1].split("&")[0] 
-                          : artist.video_url.split("/").pop()
-                      }`}
-                      title="YouTube video player"
-                      className="absolute inset-0 w-full h-full border-0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <video
-                      src={artist.video_url}
-                      controls
-                      className="w-full h-full object-contain"
-                      poster={artist.image_url}
-                    />
-                  )}
-                </div>
-              </div>
-            )}
 
             {/* CTA Box */}
             <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md space-y-4">
@@ -230,28 +196,6 @@ export default async function ArtistPage({ params }: Props) {
             </div>
           </div>
         </div>
-
-        {/* Gallery Section */}
-        {artist.gallery.length > 0 && (
-          <div className="mt-24 space-y-8">
-            <h2 className="text-3xl font-bold flex items-center gap-3">
-              <span className="h-8 w-1 bg-primary rounded-full" />
-              Galería de Fotos
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {artist.gallery.map((img: string, i: number) => (
-                <div key={i} className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 group">
-                  <Image
-                    src={img || "/placeholder.jpg"}
-                    alt={`${artist.name} - Galería ${i + 1}`}
-                    fill
-                    className="object-contain transition-transform duration-500 group-hover:scale-110 bg-black/30"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Hidden SEO Keywords for Search Engines */}
         <section className="mt-24 pt-12 border-t border-white/5 opacity-20 pointer-events-none select-none">

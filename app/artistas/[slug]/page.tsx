@@ -159,6 +159,24 @@ export default async function ArtistPage({ params }: Props) {
               </p>
             </div>
 
+            {/* Video Section */}
+            {artist.video_url && (
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <span className="h-6 w-1 bg-primary rounded-full" />
+                  Video Promocional
+                </h2>
+                <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
+                  <video
+                    src={artist.video_url}
+                    controls
+                    className="w-full h-full object-contain"
+                    poster={artist.image_url}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* CTA Box */}
             <div className="p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md space-y-4">
               <h3 className="font-bold text-xl text-primary flex items-center gap-2">

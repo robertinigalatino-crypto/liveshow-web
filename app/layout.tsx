@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { JsonLd } from '@/components/json-ld'
+import { BackgroundMusic } from '@/components/background-music'
+import { createStaticClient } from '@/lib/supabase/server'
 import './globals.css'
 
 const playfair = Playfair_Display({ 
@@ -118,16 +120,33 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+async function getBackgroundAudio() {
+  try {
+    const supabase = createStaticClient()
+    const { data } = await supabase
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'background_audio_url')
+      .single()
+    return data?.value || null
+  } catch {
+    return null
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const audioUrl = await getBackgroundAudio()
+
   return (
     <html lang="es">
       <body className={`${playfair.variable} ${inter.variable} font-sans antialiased`}>
         <JsonLd />
         {children}
+        <BackgroundMusic audioUrl={audioUrl} />
         <Analytics />
       </body>
     </html>

@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { ImageDropzone } from "@/components/ui/image-dropzone"
-import { Save, Settings, Check } from "lucide-react"
+import { AudioDropzone } from "@/components/ui/audio-dropzone"
+import { Save, Settings, Check, Music } from "lucide-react"
 import type { SiteSettings } from "@/lib/types"
 
 interface SettingsAdminProps {
@@ -53,9 +54,10 @@ export function SettingsAdmin({ settings, onRefresh }: SettingsAdminProps) {
     for (const field of settingsFields) {
       data[field.key] = settings[field.key] || ""
     }
-    // Include logo_url and partnership_logo_url which are handled separately
+    // Include logo_url, partnership_logo_url and background_audio_url which are handled separately
     data["logo_url"] = settings["logo_url"] || ""
     data["partnership_logo_url"] = settings["partnership_logo_url"] || ""
+    data["background_audio_url"] = settings["background_audio_url"] || ""
     setFormData(data)
   }, [settings])
 
@@ -64,8 +66,8 @@ export function SettingsAdmin({ settings, onRefresh }: SettingsAdminProps) {
     setSaved(false)
 
     try {
-      // Create an array of valid keys including logo_url and partnership_logo_url
-      const validKeys = [...settingsFields.map(f => f.key), "logo_url", "partnership_logo_url"]
+      // Create an array of valid keys including logo_url, partnership_logo_url and background_audio_url
+      const validKeys = [...settingsFields.map(f => f.key), "logo_url", "partnership_logo_url", "background_audio_url"]
       
       const updates = Object.entries(formData)
         .filter(([key, value]) => validKeys.includes(key) && value !== (settings[key] || ""))
@@ -172,6 +174,33 @@ export function SettingsAdmin({ settings, onRefresh }: SettingsAdminProps) {
                 />
               </div>
             ))}
+          </CardContent>
+        </Card>
+
+        {/* Audio Configuration */}
+        <Card className="bg-card/50 border-border/50 md:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Music className="h-5 w-5 text-primary" />
+              Música de Fondo
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+              <AudioDropzone
+                label="Archivo de Audio (Site-wide)"
+                value={formData["background_audio_url"] || ""}
+                onChange={(url) => setFormData({ ...formData, background_audio_url: url })}
+                onUpload={handleUploadLogo} // We can reuse handleUploadLogo as it uses the same uploadFile logic with a generic bucket name
+                onRemove={handleRemoveLogo}
+                className="flex-1"
+              />
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                <p className="text-sm text-muted-foreground">
+                  <strong className="text-primary">Nota:</strong> El audio se reproducirá automáticamente cuando el usuario interactúe con la página (haga clic en cualquier lugar). Se recomienda un archivo liviano (MP3).
+                </p>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

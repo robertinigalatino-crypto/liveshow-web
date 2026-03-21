@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { ImageDropzone } from "@/components/ui/image-dropzone"
 import { GalleryDropzone } from "@/components/ui/gallery-dropzone"
+import { VideoDropzone } from "@/components/ui/video-dropzone"
 import { Trash2, Edit, Plus, Users, X, Link as LinkIcon, Instagram, Youtube, Music2, Globe } from "lucide-react"
 import Image from "next/image"
 import { useToast } from "@/components/ui/use-toast"
@@ -40,6 +41,7 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
     links: [] as ArtistLink[],
     gallery: [] as string[],
     whatsapp_number: "",
+    video_url: "",
     display_order: 0,
   })
   const [tagInput, setTagInput] = useState("")
@@ -79,6 +81,7 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
       links: formData.links.filter((l) => l.url.trim() !== ""),
       gallery: formData.gallery,
       whatsapp_number: formData.whatsapp_number,
+      video_url: formData.video_url,
       display_order: formData.display_order,
     }
 
@@ -123,7 +126,7 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
   function resetForm() {
     setFormData({
       name: "", category: "", bio: "", image_url: "",
-      tags: [], links: [], gallery: [], whatsapp_number: "", display_order: 0,
+      tags: [], links: [], gallery: [], whatsapp_number: "", video_url: "", display_order: 0,
     })
     setTagInput("")
   }
@@ -140,7 +143,8 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
       links: artist.links || [],
       gallery: artist.gallery || [],
       whatsapp_number: artist.whatsapp_number || "",
-      display_order: artist.display_order,
+      video_url: artist.video_url || "",
+      display_order: artist.display_order || 0,
     })
     setTagInput("")
   }
@@ -165,6 +169,34 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
     }
     if (e.key === "Backspace" && !tagInput && formData.tags.length > 0) {
       removeTag(formData.tags[formData.tags.length - 1])
+    }
+  }
+
+  async function handleVideoUpload(file: File) {
+    const fileExt = file.name.split(".").pop()
+    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`
+    const filePath = `videos/${fileName}`
+
+    const { error: uploadError } = await supabase.storage
+      .from("artists-videos")
+      .upload(filePath, file)
+
+    if (uploadError) {
+      toast({ title: "Error", description: `Error al subir video: ${uploadError.message}`, variant: "destructive" })
+      return null
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("artists-videos")
+      .getPublicUrl(filePath)
+
+    return publicUrl
+  }
+
+  async function handleVideoRemove(url: string) {
+    const path = url.split("/").pop()
+    if (path) {
+      await supabase.storage.from("artists-videos").remove([`videos/${path}`])
     }
   }
 
@@ -210,13 +242,22 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
               <form onSubmit={handleSubmit} className="space-y-5">
 
                 {/* ── Imagen principal ── */}
-                <ImageDropzone
-                  label="Foto del artista"
-                  value={formData.image_url}
-                  onChange={(url) => setFormData({ ...formData, image_url: url })}
-                  onUpload={handleUploadArtistImage}
-                  onRemove={handleRemoveArtistImage}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <ImageDropzone
+                    label="Foto de Perfil"
+                    value={formData.image_url}
+                    onUpload={handleUploadArtistImage}
+                    onRemove={handleRemoveArtistImage}
+                    onChange={(url) => setFormData({ ...formData, image_url: url })}
+                  />
+                  <VideoDropzone
+                    label="Video Promocional (Opcional)"
+                    value={formData.video_url}
+                    onUpload={handleVideoUpload}
+                    onRemove={handleVideoRemove}
+                    onChange={(url) => setFormData({ ...formData, video_url: url })}
+                  />
+                </div>
 
                 {/* ── Nombre ── */}
                 <div className="space-y-1.5">

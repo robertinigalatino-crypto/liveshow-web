@@ -24,6 +24,7 @@ export interface Artist {
   links: ArtistLink[]
   gallery: string[]
   whatsapp_number: string
+  video_url?: string
   display_order: number
   is_active?: boolean
   created_at?: string

@@ -27,7 +27,6 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
 
   const [activeCategory, setActiveCategory] = useState(categoryTabs[0]?.id || "")
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const [visibleCount, setVisibleCount] = useState(12)
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -37,7 +36,6 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
         if (categoryTabs.some((c) => c.id === slug)) {
           setActiveCategory(slug)
           setSelectedIndex(null)
-          setVisibleCount(12)
           
           // Smoother scroll to the section
           const element = document.getElementById("artistas")
@@ -98,7 +96,6 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
                 onClick={() => { 
                   setActiveCategory(cat.id); 
                   setSelectedIndex(null);
-                  setVisibleCount(12);
                 }}
                 className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full text-xs sm:text-sm font-bold uppercase tracking-widest transition-all duration-300 snap-start border ${
                   activeCategory === cat.id
@@ -112,9 +109,8 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
           </div>
         )}
 
-        {/* Artists Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4">
-          {filteredArtists.slice(0, visibleCount).map((artist, index) => (
+          {filteredArtists.map((artist, index) => (
             <Link
               key={artist.id}
               href={`/artistas/${slugify(artist.name)}`}
@@ -152,18 +148,6 @@ export function Artistas({ artists = [], categories = [], settings = {} }: Artis
           ))}
         </div>
 
-        {/* Load More Button */}
-        {filteredArtists.length > visibleCount && (
-          <div className="mt-8 text-center">
-            <Button 
-              variant="outline"
-              onClick={() => setVisibleCount(prev => prev + 12)}
-              className="rounded-full border-primary/50 text-primary hover:bg-primary hover:text-white transition-all px-8"
-            >
-              Cargar más artistas ({filteredArtists.length - visibleCount} restantes)
-            </Button>
-          </div>
-        )}
 
         {/* Selected Artist Bio Panel */}
         {selectedArtist && (

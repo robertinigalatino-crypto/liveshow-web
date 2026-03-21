@@ -4,11 +4,11 @@ import { Instagram, Phone } from "lucide-react"
 import type { Category, SiteSettings } from "@/lib/types"
 
 const navLinks = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#shows", label: "Shows" },
-  { href: "#servicios", label: "Servicios" },
-  { href: "#artistas", label: "Artistas" },
-  { href: "#contacto", label: "Contacto" },
+  { href: "/", label: "Inicio" },
+  { href: "/#shows", label: "Shows" },
+  { href: "/#servicios", label: "Servicios" },
+  { href: "/artistas", label: "Catálogo de Artistas" },
+  { href: "/#contacto", label: "Contacto" },
 ]
 
 interface FooterProps {

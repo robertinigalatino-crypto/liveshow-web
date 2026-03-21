@@ -2,7 +2,7 @@ import { createBrowserClient } from "@supabase/ssr"
 
 type SupabaseClient = ReturnType<typeof createBrowserClient>
 
-export type StorageBucket = "artists" | "artists-gallery" | "shows" | "channels" | "settings" | "gallery"
+export type StorageBucket = "artists" | "artists-gallery" | "shows" | "channels" | "settings" | "gallery" | "artists-videos" | "site-audio"
 
 /**
  * Upload a file to a Supabase Storage bucket.
@@ -14,10 +14,10 @@ export async function uploadFile(
   file: File,
   folder?: string,
 ): Promise<string | null> {
-  const VALID_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "gif"]
+  const VALID_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "gif", "mp4", "webm", "mov", "mp3", "wav", "ogg"]
   const parts = file.name.split(".")
-  const ext = parts.length > 1 ? (parts.pop()?.toLowerCase() || "jpg") : "jpg"
-  const safeExt = VALID_EXTENSIONS.includes(ext) ? ext : "jpg"
+  const ext = parts.length > 1 ? (parts.pop()?.toLowerCase() || "") : ""
+  const safeExt = VALID_EXTENSIONS.includes(ext) ? ext : (bucket === "site-audio" ? "mp3" : bucket === "artists-videos" ? "mp4" : "jpg")
 
   const timestamp = Date.now()
   const random = Math.random().toString(36).substring(2, 8)

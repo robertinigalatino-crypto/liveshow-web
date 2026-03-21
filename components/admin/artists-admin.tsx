@@ -11,7 +11,8 @@ import { Label } from "@/components/ui/label"
 import { ImageDropzone } from "@/components/ui/image-dropzone"
 import { GalleryDropzone } from "@/components/ui/gallery-dropzone"
 import { VideoDropzone } from "@/components/ui/video-dropzone"
-import { Trash2, Edit, Plus, Users, X, Link as LinkIcon, Instagram, Youtube, Music2, Globe } from "lucide-react"
+import { Youtube, FileVideo, Trash2, Edit, Plus, Users, X, Link as LinkIcon, Instagram, Music2, Globe } from "lucide-react"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import Image from "next/image"
 import { useToast } from "@/components/ui/use-toast"
 import type { Artist, ArtistLink, Category } from "@/lib/types"
@@ -193,6 +194,11 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
     return publicUrl
   }
 
+  const isYouTubeUrl = (url?: string) => {
+    if (!url) return false
+    return url.includes("youtube.com") || url.includes("youtu.be")
+  }
+
   async function handleVideoRemove(url: string) {
     const path = url.split("/").pop()
     if (path) {
@@ -250,13 +256,42 @@ export function ArtistsAdmin({ artists, categories, onRefresh }: ArtistsAdminPro
                     onRemove={handleRemoveArtistImage}
                     onChange={(url) => setFormData({ ...formData, image_url: url })}
                   />
-                  <VideoDropzone
-                    label="Video Promocional (Opcional)"
-                    value={formData.video_url}
-                    onUpload={handleVideoUpload}
-                    onRemove={handleVideoRemove}
-                    onChange={(url) => setFormData({ ...formData, video_url: url })}
-                  />
+                  <div className="space-y-1.5">
+                    <Label>Video Promocional</Label>
+                    <Tabs defaultValue={formData.video_url && isYouTubeUrl(formData.video_url) ? "link" : "file"} className="w-full">
+                      <TabsList className="grid w-full grid-cols-2 bg-background/50">
+                        <TabsTrigger value="file" className="text-xs">
+                          <FileVideo className="h-3 w-3 mr-1.5" /> Archivo
+                        </TabsTrigger>
+                        <TabsTrigger value="link" className="text-xs">
+                          <Youtube className="h-3 w-3 mr-1.5" /> YouTube
+                        </TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="file" className="mt-2">
+                        <VideoDropzone
+                          value={isYouTubeUrl(formData.video_url) ? "" : formData.video_url}
+                          onUpload={handleVideoUpload}
+                          onRemove={handleVideoRemove}
+                          onChange={(url) => setFormData({ ...formData, video_url: url })}
+                          compact
+                        />
+                      </TabsContent>
+                      <TabsContent value="link" className="mt-2">
+                        <div className="space-y-2">
+                          <Input
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            value={isYouTubeUrl(formData.video_url) ? formData.video_url : ""}
+                            onChange={(e) => setFormData({ ...formData, video_url: e.target.value })}
+                            className="bg-background/50 h-10"
+                          />
+                          <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                            <Youtube className="h-3 w-3 text-red-500" />
+                            Pegá el link completo del video de YouTube.
+                          </p>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </div>
                 </div>
 
                 {/* ── Nombre ── */}

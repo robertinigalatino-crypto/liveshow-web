@@ -191,8 +191,8 @@ export function SettingsAdmin({ settings, onRefresh }: SettingsAdminProps) {
                 label="Archivo de Audio (Site-wide)"
                 value={formData["background_audio_url"] || ""}
                 onChange={(url) => setFormData({ ...formData, background_audio_url: url })}
-                onUpload={handleUploadLogo} // We can reuse handleUploadLogo as it uses the same uploadFile logic with a generic bucket name
-                onRemove={handleRemoveLogo}
+                onUpload={(file) => uploadFile(supabase, "site-audio", file)}
+                onRemove={async (url) => { await deleteFile(supabase, "site-audio", url) }}
                 className="flex-1"
               />
               <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">

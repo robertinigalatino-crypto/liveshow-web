@@ -167,12 +167,26 @@ export default async function ArtistPage({ params }: Props) {
                   Video Promocional
                 </h2>
                 <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40">
-                  <video
-                    src={artist.video_url}
-                    controls
-                    className="w-full h-full object-contain"
-                    poster={artist.image_url}
-                  />
+                  {artist.video_url.includes("youtube.com") || artist.video_url.includes("youtu.be") ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${
+                        artist.video_url.includes("watch?v=") 
+                          ? artist.video_url.split("watch?v=")[1].split("&")[0] 
+                          : artist.video_url.split("/").pop()
+                      }`}
+                      title="YouTube video player"
+                      className="absolute inset-0 w-full h-full border-0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <video
+                      src={artist.video_url}
+                      controls
+                      className="w-full h-full object-contain"
+                      poster={artist.image_url}
+                    />
+                  )}
                 </div>
               </div>
             )}

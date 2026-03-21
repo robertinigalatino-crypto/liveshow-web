@@ -90,7 +90,7 @@ export function ArtistsClientList({ artists, whatsappNumber }: ArtistsClientList
                 <Link href={`/artistas/${slugify(artist.name)}`}>
                   <Image
                     src={artist.image_url || '/placeholder.jpg'}
-                    alt={`Foto de ${artist.name}`}
+                    alt={`Contratar a ${artist.name} - Show de ${artist.category} para eventos`}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -128,13 +128,14 @@ export function ArtistsClientList({ artists, whatsappNumber }: ArtistsClientList
                     <Link
                       href={`https://wa.me/${artist.whatsapp_number || whatsappNumber}?text=${encodeURIComponent(`Hola! Me interesa contratar a ${artist.name}`)}`}
                       target="_blank"
+                      aria-label={`Consultar presupuesto para contratar a ${artist.name} por WhatsApp`}
                     >
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Consultar
                     </Link>
                   </Button>
                   <Button asChild variant="outline" className="px-4 rounded-xl border-white/20 hover:bg-white/10 h-11">
-                    <Link href={`/artistas/${slugify(artist.name)}`} aria-label={`Ver perfil de ${artist.name}`}>
+                    <Link href={`/artistas/${slugify(artist.name)}`} aria-label={`Ver perfil completo y biografía de ${artist.name}`}>
                       Ver más
                     </Link>
                   </Button>
